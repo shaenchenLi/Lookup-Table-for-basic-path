@@ -33,6 +33,9 @@
     <ClInclude Include="tinysplinecpp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="turn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lane_change.cpp">
@@ -48,6 +51,9 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="create.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="turn.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

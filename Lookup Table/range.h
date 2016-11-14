@@ -7,9 +7,10 @@
 #define theta_space (PI/72)
 
 // error
-#define ERROR_1 0.3f
+#define ERROR_1 0.1f
 #define ERROR_2 0.05f
-#define ERROR_3 0.5f
+#define ERROR_3 0.2f
+#define ERROR_4 1.f
 
 // vehicle
 #define KMAX 0.26f
@@ -33,28 +34,27 @@
 #define THETA_min_L (-PI/4)
 #define L_min_L 2.f
 #define L_max_L 50.f
-// L_max equals to x of destination
 #define W_min_L -2.75f
 #define W_max_L 3.f 
 
 //turn
-#define X_min_T 5.f
-#define X_max_T 50.f
-#define Y_min_T 5.f
-#define Y_max_T 50.f 
-#define L_min_T 0.f
-#define L_max_T 45.f
-#define W_min_T 0.75f
-#define W_max_T 50.f
-
-//U_turn
-#define X_min_U -10.f
-#define X_max_U 50.f
-#define Y_min_U 1.5f
-#define Y_max_U 6.5f
-#define L_min_U 0.f
-#define L_max_U 50.f
-#define W_min_U 0.75f
-#define W_max_U 2.75f
+#define X_min_LT 5.f
+#define X_max_LT 50.f
+#define Y_min_LT 5.f
+#define Y_max_LT 50.f 
+#define THETA_min_LT (0.25f*PI)
+#define THETA_max_LT (0.75f*PI)
+#define L_min_LT 0.f
+#define L_max_LT 45.f
+#define W_min_LT 0.75f
+#define W_max_LT 50.f
+#define R_min_LT 0.75f
+#define R_max_LT 10.f
+#define X_min_RT -0.5f
+#define X_max_RT -25.f
+#define Y_min_RT -0.5f
+#define Y_max_RT -25.f
+#define THETA_min_RT (-0.25f*PI)
+#define THETA_max_RT (-0.75f*PI)
 
 #endif

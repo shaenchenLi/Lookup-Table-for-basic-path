@@ -53,9 +53,11 @@ struct path_library
 	}
 	void _L_min()
 	{
+		L_min->push_back(17 * PI / 18);
+		L_min->push_back(_L_min(*L_min->rbegin()));
 		L_min->push_back(8 * PI / 9);
 		L_min->push_back(_L_min(*L_min->rbegin()));
-		for (int i = 0; i < 6; i++) 
+		for (int i = 0; i < 6; i++)
 		{
 			L_min->push_back(5 * PI / 6 - i*0.1f*PI);
 			L_min->push_back(_L_min(*L_min->rbegin()));

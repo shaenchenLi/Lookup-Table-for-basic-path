@@ -70,6 +70,7 @@
     <ClInclude Include="straight.h" />
     <ClInclude Include="tinyspline.h" />
     <ClInclude Include="tinysplinecpp.h" />
+    <ClInclude Include="turn.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="create.cpp" />
@@ -77,6 +78,7 @@
     <ClCompile Include="straight.cpp" />
     <ClCompile Include="tinyspline.c" />
     <ClCompile Include="tinysplinecpp.cpp" />
+    <ClCompile Include="turn.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
