@@ -1,6 +1,9 @@
 #ifndef TURN_H
 #define TURN_H
 
+#include <iostream>
+using std::endl; using std::cout;
+
 #include "range.h"
 #include "datastruct.h"
 

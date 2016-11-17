@@ -50,10 +50,10 @@
     <ClCompile Include="tinysplinecpp.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="create.cpp">
+    <ClCompile Include="turn.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="turn.cpp">
+    <ClCompile Include="dbcreate.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

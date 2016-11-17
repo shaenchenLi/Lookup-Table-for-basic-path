@@ -2,11 +2,15 @@
 #define DATASTRUCT_H
 
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 #include <unordered_map>
 #include <vector>
 using std::make_pair;
 using std::unordered_map;
 using std::vector;
+using std::cout;
+using std::endl;
 
 #include "range.h"
 
@@ -47,17 +51,15 @@ struct path_library
 	}
 	
 	virtual void create_lib() {}
-	float _L_min(const float &theta, const float err = 0)
+	float _L_min(const float &theta, const float err = 0.f)
 	{
 		return (sinf(theta)*powf((1 - cosf(theta)) / 8, -1.5) / 6.f / std::min(KMAX, std::abs(KMIN)) + err);
 	}
 	void _L_min()
 	{
-		L_min->push_back(17 * PI / 18);
-		L_min->push_back(_L_min(*L_min->rbegin()));
 		L_min->push_back(8 * PI / 9);
 		L_min->push_back(_L_min(*L_min->rbegin()));
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 6; i++) 
 		{
 			L_min->push_back(5 * PI / 6 - i*0.1f*PI);
 			L_min->push_back(_L_min(*L_min->rbegin()));

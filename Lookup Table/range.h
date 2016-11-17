@@ -34,7 +34,7 @@
 #define THETA_min_L (-PI/4)
 #define L_min_L 2.f
 #define L_max_L 50.f
-#define W_min_L -2.75f
+#define W_min_L (-2.75f)
 #define W_max_L 3.f 
 
 //turn
@@ -50,11 +50,23 @@
 #define W_max_LT 50.f
 #define R_min_LT 0.75f
 #define R_max_LT 10.f
-#define X_min_RT -0.5f
-#define X_max_RT -25.f
-#define Y_min_RT -0.5f
-#define Y_max_RT -25.f
+#define X_min_RT 0.5f
+#define X_max_RT 25.f
+#define Y_min_RT (-0.5f)
+#define Y_max_RT (-25.f)
 #define THETA_min_RT (-0.25f*PI)
 #define THETA_max_RT (-0.75f*PI)
+
+//U_turn
+#define X_min_U (-10.f)
+#define X_max_U 50.f
+#define Y_min_U 1.5f
+#define Y_max_U 6.5f
+#define THETA_min_U (0.75f*PI)
+#define THETA_max_U (1.25f*PI)
+#define L_min_U 0.f
+#define L_max_U 50.f
+#define W_min_U 0.75f
+#define W_max_U 2.75f
 
 #endif

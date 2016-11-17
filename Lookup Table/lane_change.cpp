@@ -1,13 +1,14 @@
 #include "lane_change.h"
 
-bool Lane_Change_Path::lane_change_path_library::_obs_control(const vector<float> &bound_condition, vector<float> *control)
+bool Lane_Change_Path::lane_change_path_library::_obs_control(const vector<float> &bound_condition, vector<float> *control/*, void *data*/)
 {
 	float xg = bound_condition[0];
 	float yg = bound_condition[1];
 	float thetag = bound_condition[2];
 	float l = bound_condition[3];
 	float w = bound_condition[4];
-
+	cout << bound_condition[0] << " " << bound_condition[1] << " " << bound_condition[2] << endl;
+	cout << "l:" << l << " w:" << w << endl;
 	float alfa, l1, l2, l3, x2, y2, alfa_tmp, l1_tmp, l2_tmp, l3_tmp, x2_tmp, y2_tmp;
 	bool result = false;
 	for (auto a = L_min->begin(); a != L_min->end(); a += 2)
@@ -20,7 +21,7 @@ bool Lane_Change_Path::lane_change_path_library::_obs_control(const vector<float
 
 		// calculate l2&l3
 		l2_tmp = (xg*sinf(thetag) - yg*cosf(thetag) - l1_tmp*sinf(thetag)) / (-cosf(alfa_tmp)*sinf(thetag) - sinf(alfa_tmp)*cosf(thetag));
-		l3_tmp = (yg - l2_tmp*sinf(alfa_tmp)) / sinf(thetag);
+		l3_tmp = (xg - l1_tmp + l2_tmp*cosf(alfa_tmp)) / cosf(thetag);
 
 		if (std::min(l2_tmp, l1_tmp) < *(a + 1) || std::min(l2_tmp, l3_tmp) < _L_min((alfa_tmp + thetag) > PI ? (2.f*PI - alfa_tmp - thetag) : (alfa_tmp + thetag)))
 			continue;
@@ -30,57 +31,6 @@ bool Lane_Change_Path::lane_change_path_library::_obs_control(const vector<float
 			if (w < ((l - l1_tmp - l2_tmp*cosf(alfa_tmp) - W / 2 * sinf(thetag))*tanf(thetag) + l2_tmp*sinf(alfa_tmp) + ERROR_1))
 				continue;
 		}
-
-		x2_tmp = l1_tmp - l2_tmp*cosf(alfa_tmp);
-		y2_tmp = l2_tmp*sinf(alfa_tmp);
-		if (((y2_tmp + 0.5f*W*cosf(alfa_tmp))>yg + W / 2 + 0.2) || (x2_tmp + W / 2 * sinf(alfa_tmp) - L_F_BA*cosf(alfa_tmp)) > xg)
-			continue;
-
-		result = true;
-		alfa = alfa_tmp;
-		l1 = l1_tmp;
-		l2 = l2_tmp;
-		l3 = l3_tmp;
-		x2 = x2_tmp;
-		y2 = y2_tmp;
-	}
-	if (result == false)
-		failed_bound->push_back(bound_condition);
-	else
-	{
-		control->push_back(0); control->push_back(0);
-		control->push_back(l1 / 2); control->push_back(0);
-		control->push_back(l1); control->push_back(0);
-		control->push_back(0.5f*(l1 + x2)); control->push_back(0.5f*y2);
-		control->push_back(x2); control->push_back(y2);
-		control->push_back(0.5f*(xg + x2)); control->push_back(0.5f*(yg + y2));
-		control->push_back(xg); control->push_back(yg);
-	}
-	return result;
-}
-
-bool Lane_Change_Path::lane_change_path_library::_safe_control(const vector<float> &bound_condition, vector<float> *control)
-{
-	float xg = bound_condition[0];
-	float yg = bound_condition[1];
-	float thetag = bound_condition[2];
-
-	float alfa, l1, l2, l3, x2, y2, alfa_tmp, l1_tmp, l2_tmp, l3_tmp, x2_tmp, y2_tmp;
-	bool result = false;
-	for (auto a = L_min->begin(); a != L_min->end(); a += 2)
-	{
-		// calculate l1
-		alfa_tmp = *a;
-		l1_tmp = _L_min(alfa_tmp, ERROR_2);
-		if (l1_tmp > xg)
-			break;
-
-		// calculate l2&l3
-		l2_tmp = (xg*sinf(thetag) - yg*cosf(thetag) - l1_tmp*sinf(thetag)) / (-cosf(alfa_tmp)*sinf(thetag) - sinf(alfa_tmp)*cosf(thetag));
-		l3_tmp = (xg - l1_tmp + l2_tmp*cosf(alfa_tmp)) / cosf(thetag);
-		
-		if (std::min(l2_tmp, l1_tmp) < *(a + 1) || std::min(l2_tmp, l3_tmp) < _L_min((alfa_tmp + thetag) > PI ? (2.f*PI - alfa_tmp - thetag) : (alfa_tmp + thetag)))
-			continue;
 
 		x2_tmp = l1_tmp - l2_tmp*cosf(alfa_tmp);
 		y2_tmp = l2_tmp*sinf(alfa_tmp);
@@ -95,10 +45,23 @@ bool Lane_Change_Path::lane_change_path_library::_safe_control(const vector<floa
 		x2 = x2_tmp;
 		y2 = y2_tmp;
 	}
+	std::ofstream outfile;
 	if (result == false)
+	{
 		failed_bound->push_back(bound_condition);
+		outfile.open("E:\\postgraduate\\codes\\database\\database\\lane_change_leftturn_constraint_failed.txt", std::ios::app);
+		for (auto &i : bound_condition)
+			outfile << i << " ";
+		outfile << endl;
+		outfile.close();
+		outfile.open("E:\\postgraduate\\codes\\database\\database\\lane_change_rightturn_constraint_failed.txt", std::ios::app);
+		outfile << bound_condition[0] << " " << bound_condition[1] * (-1) << " " << bound_condition[2] * (-1) << " " << bound_condition[3] << " " << bound_condition[4] * (-1);
+		outfile << endl;
+		outfile.close();
+	}
 	else
 	{
+		cout << "l1:" << l1 << " l2:" << l2 << " l3:" << l3 << " alfa:" << alfa << endl;
 		control->push_back(0); control->push_back(0);
 		control->push_back(l1 / 2); control->push_back(0);
 		control->push_back(l1); control->push_back(0);
@@ -106,7 +69,95 @@ bool Lane_Change_Path::lane_change_path_library::_safe_control(const vector<floa
 		control->push_back(x2); control->push_back(y2);
 		control->push_back(0.5f*(xg + x2)); control->push_back(0.5f*(yg + y2));
 		control->push_back(xg); control->push_back(yg);
+		outfile.open("E:\\postgraduate\\codes\\database\\database\\lane_change_leftturn_constraint.txt", std::ios::app);
+		for (auto &i : bound_condition)
+			outfile << i << " ";
+		for (auto &i : *control)
+			outfile << i << " ";
+		outfile << endl;
+		outfile.close();
+		outfile.open("E:\\postgraduate\\codes\\database\\database\\lane_change_rightturn_constraint.txt", std::ios::app);
+		outfile << bound_condition[0] << " " << bound_condition[1] * (-1) << " " << bound_condition[2] * (-1) << " " << bound_condition[3] << " " << bound_condition[4] * (-1) << " ";
+		for (int i = 0; i < 7; i++)
+			outfile << (*control)[2 * i] << " " << (*control)[2 * i + 1] * (-1) << " ";
 	}
+	cout << endl;
+	return result;
+}
+
+bool Lane_Change_Path::lane_change_path_library::_safe_control(const vector<float> &bound_condition, vector<float> *control/*, void *data*/)
+{
+	std::ofstream outfile;
+	float xg = bound_condition[0];
+	float yg = bound_condition[1];
+	float thetag = bound_condition[2];
+	cout << bound_condition[0] << " " << bound_condition[1] << " " << bound_condition[2] << endl;
+
+	float alfa, l1, l2, l3, x2, y2, alfa_tmp, l1_tmp, l2_tmp, l3_tmp, x2_tmp, y2_tmp;
+	bool result = false;
+
+	for (auto a = L_min->begin(); a != L_min->end(); a += 2)
+	{
+		// calculate l1
+		alfa_tmp = *a;
+		l1_tmp = _L_min(alfa_tmp, ERROR_2);
+		if (l1_tmp > xg)
+			break;
+
+		// calculate l2&l3
+		l2_tmp = (xg*sinf(thetag) - yg*cosf(thetag) - l1_tmp*sinf(thetag)) / (-cosf(alfa_tmp)*sinf(thetag) - sinf(alfa_tmp)*cosf(thetag));
+		l3_tmp = (xg - l1_tmp + l2_tmp*cosf(alfa_tmp)) / cosf(thetag);
+
+		if (std::min(l2_tmp, l1_tmp) < *(a + 1) || std::min(l2_tmp, l3_tmp) < _L_min((alfa_tmp + thetag) > PI ? (2.f*PI - alfa_tmp - thetag) : (alfa_tmp + thetag), 0.1))
+			continue;
+
+		x2_tmp = l1_tmp - l2_tmp*cosf(alfa_tmp);
+		y2_tmp = l2_tmp*sinf(alfa_tmp);
+		if (((y2_tmp + 0.5f*W*cosf(alfa_tmp)) > yg + W / 2 + 0.2) || (x2_tmp + W / 2 * sinf(alfa_tmp) - L_F_BA*cosf(alfa_tmp)) > xg)// path can't exceed the allowed lane
+			continue;
+
+		result = true;
+		alfa = alfa_tmp;
+		l1 = l1_tmp;
+		l2 = l2_tmp;
+		l3 = l3_tmp;
+		x2 = x2_tmp;
+		y2 = y2_tmp;
+	}
+	if (result == false)
+	{
+		failed_bound->push_back(bound_condition);
+		outfile.open("E:\\postgraduate\\codes\\database\\database\\lane_change_leftturn_failed.txt", std::ios::app);
+		outfile << bound_condition[0] << " " << bound_condition[1] << " " << bound_condition[2] << endl;
+		outfile.close();
+		outfile.open("E:\\postgraduate\\codes\\database\\database\\lane_change_rightturn_failed.txt", std::ios::app);
+		outfile << bound_condition[0] << " " << bound_condition[1] * (-1) << " " << bound_condition[2] * (-1) << endl;
+		outfile.close();
+	}
+	else
+	{
+		cout << "l1:" << l1 << " l2:" << l2 << " l3:" << l3 << " alfa:" << alfa << endl;
+		control->push_back(0); control->push_back(0);
+		control->push_back(l1 / 2); control->push_back(0);
+		control->push_back(l1); control->push_back(0);
+		control->push_back(0.5f*(l1 + x2)); control->push_back(0.5f*y2);
+		control->push_back(x2); control->push_back(y2);
+		control->push_back(0.5f*(xg + x2)); control->push_back(0.5f*(yg + y2));
+		control->push_back(xg); control->push_back(yg);
+		outfile.open("E:\\postgraduate\\codes\\database\\database\\lane_change_leftturn.txt", std::ios::app);
+		outfile << bound_condition[0] << " " << bound_condition[1] << " " << bound_condition[2] << " ";
+		for (auto &i : *control)
+			outfile << i << " ";
+		outfile << endl;
+		outfile.close();
+		outfile.open("E:\\postgraduate\\codes\\database\\database\\lane_change_rightturn.txt", std::ios::app);
+		outfile << bound_condition[0] << " " << bound_condition[1] * (-1) << " " << bound_condition[2] * (-1) << " ";
+		for (int i = 0; i < 7; i++)
+			outfile << (*control)[2 * i] << " " << (*control)[2 * i + 1] * (-1) << " ";
+		outfile << endl;
+		outfile.close();
+	}
+	cout << endl;
 	return result;
 }
 
@@ -149,7 +200,7 @@ void Lane_Change_Path::lane_change_path_library::create_lib()
 					{
 						for (int q = 0; q <= N_w; q++)
 						{
-							vector<float> bound_condition = { space_x*i + X_min_L, space_y*j + Y_min_L, space_theta*k + THETA_min_L, p*space_l + L_min_L, std::min(space_y*j + Y_min_L, q*space_w + W_min_L) };
+							vector<float> bound_condition = { space_x*i + X_min_L, space_y*j + Y_min_L, space_theta*k + THETA_min_L, p*space_l + L_min_L, q*space_w + W_min_L };
 							vector<float> *control = new vector<float>;
 							add(&bound_condition, control);
 							delete control;
@@ -180,7 +231,7 @@ void Lane_Change_Path::lane_change_path_library::create_lib()
 void Lane_Change_Path::lane_change_path_library::left_right(lane_change_path_library* left_lib)
 {
 	for (auto &i : *left_lib->_lib())
-		lane_change_path_lib->insert({ { i.first[0], i.first[1] * (-1), i.first[2] }, { i.second[0], i.second[2] * (-1) } });
+		lane_change_path_lib->insert({ { i.first[0], i.first[1] * (-1), i.first[2] * (-1) }, { i.second[0], i.second[2] * (-1) } });
 	for (auto &i : *left_lib->_failed_bound())
 		failed_bound->push_back({ i[0], i[1] * (-1), i[2] });
 }
