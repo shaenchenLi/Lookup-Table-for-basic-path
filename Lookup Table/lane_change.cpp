@@ -48,7 +48,6 @@ bool Lane_Change_Path::lane_change_path_library::_obs_control(const vector<float
 	std::ofstream outfile;
 	if (result == false)
 	{
-		failed_bound->push_back(bound_condition);
 		outfile.open("E:\\postgraduate\\codes\\database\\database\\lane_change_leftturn_constraint_failed.txt", std::ios::app);
 		for (auto &i : bound_condition)
 			outfile << i << " ";
@@ -126,7 +125,6 @@ bool Lane_Change_Path::lane_change_path_library::_safe_control(const vector<floa
 	}
 	if (result == false)
 	{
-		failed_bound->push_back(bound_condition);
 		outfile.open("E:\\postgraduate\\codes\\database\\database\\lane_change_leftturn_failed.txt", std::ios::app);
 		outfile << bound_condition[0] << " " << bound_condition[1] << " " << bound_condition[2] << endl;
 		outfile.close();
@@ -232,6 +230,4 @@ void Lane_Change_Path::lane_change_path_library::left_right(lane_change_path_lib
 {
 	for (auto &i : *left_lib->_lib())
 		lane_change_path_lib->insert({ { i.first[0], i.first[1] * (-1), i.first[2] * (-1) }, { i.second[0], i.second[2] * (-1) } });
-	for (auto &i : *left_lib->_failed_bound())
-		failed_bound->push_back({ i[0], i[1] * (-1), i[2] });
 }

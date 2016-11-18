@@ -71,6 +71,7 @@
     <ClInclude Include="tinyspline.h" />
     <ClInclude Include="tinysplinecpp.h" />
     <ClInclude Include="turn.h" />
+    <ClInclude Include="U_turn.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbcreate.cpp" />
@@ -79,6 +80,7 @@
     <ClCompile Include="tinyspline.c" />
     <ClCompile Include="tinysplinecpp.cpp" />
     <ClCompile Include="turn.cpp" />
+    <ClCompile Include="U_turn.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

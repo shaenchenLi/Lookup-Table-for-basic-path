@@ -76,7 +76,6 @@ bool Turn_Path::turn_path_library::_left_turn_center(const vector<float> &bound_
 	std::fstream outfile;
 	if (result == false)
 	{
-		failed_bound->push_back(bound_condition);
 		outfile.open("E:\\postgraduate\\codes\\database\\database\\turn_leftturn_center_failed.txt", std::ios::app);
 		outfile << bound_condition[0] << " " << bound_condition[1] << " " << bound_condition[2] << endl;
 		outfile << endl;
@@ -155,7 +154,6 @@ bool Turn_Path::turn_path_library::_turn(const vector<float> &bound_condition, v
 	std::fstream outfile;
 	if (result == false)
 	{
-		failed_bound->push_back(bound_condition);
 		if (flag == -1)
 		{
 			outfile.open("E:\\postgraduate\\codes\\database\\database\\turn_rightturn_failed.txt", std::ios::app);

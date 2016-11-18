@@ -11,12 +11,10 @@ namespace Lane_Change_Path
 		lane_change_path_library(const int &f) :flag(f)
 		{
 			lane_change_path_lib = new PATH;
-			failed_bound = new vector<vector<float>>;
 		}
 		lane_change_path_library(const lane_change_path_library &l)
 		{
 			lane_change_path_lib = l._lib();
-			failed_bound = l._failed_bound();
 			flag = l.flag;
 		}
 
@@ -24,7 +22,6 @@ namespace Lane_Change_Path
 		~lane_change_path_library()
 		{
 			delete lane_change_path_lib;
-			delete failed_bound;
 		}
 
 		void left_right(lane_change_path_library* left_lib);
@@ -35,11 +32,9 @@ namespace Lane_Change_Path
 		void create_lib() override;
 
 		PATH* _lib() const override { return lane_change_path_lib; }
-		vector<vector<float>>* _failed_bound() const { return failed_bound; }
 
 	private:
 		PATH* lane_change_path_lib;
-		vector<vector<float>>* failed_bound;
 		int flag; //flag=1 means that there is a obstacle or lane ,flag=0 means there is nothing
 	};
 }

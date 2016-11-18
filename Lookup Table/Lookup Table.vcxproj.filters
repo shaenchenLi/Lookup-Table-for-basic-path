@@ -36,6 +36,9 @@
     <ClInclude Include="turn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="U_turn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lane_change.cpp">
@@ -54,6 +57,9 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="dbcreate.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="U_turn.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
